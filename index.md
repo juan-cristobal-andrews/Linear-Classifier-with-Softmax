@@ -380,6 +380,184 @@ print(paste("Accuracy of ",Accuracy*100,"%",sep=""))
 
 <img src="images/output8.png" width="214" height="30" />
 
+Note that our model has now 94% out-of-sample accuracy, which is great.
+
+### 3.2 Decision Limits
+
+Just like before, we will map our decision limit 400x400 datapoint map.
+This should take some time, since K-Nearest Neighbors Algorithm needs to compare each of those 160.000 points with every single datapoint in our training dataset.
+
+```R
+start_time <- Sys.time()
+# We calculate background colors
+x_coord = seq(min(X[,1]) - 0.008,max(X[,1]) + 0.008,length.out = 400)
+y_coord = seq(min(X[,2]) - 0.008,max(X[,2]) + 0.008, length.out = 400)
+coord = expand.grid(x = x_coord, y = y_coord)
+coord[['prob']] = mapply(KnnL2Prediction, coord$x, coord$y,K)
+
+# We calculate predictions and plot decition area
+colsdot <- c("1" = "blue", "2" = "darkred", "3" = "darkgreen")
+colsfill <- c("1" = "#aaaaff", "2" = "#ffaaaa", "3" = "#aaffaa")
+ggplot() + 
+  geom_tile(data=coord,mapping=aes(x, y, fill=prob), alpha=0.8) +
+  geom_point(data=test,mapping=aes(x,y, colour=Class),size=3 ) + 
+  scale_color_manual(values=colsdot) +
+  scale_fill_manual(values=colsfill) +
+  xlab('X') + ylab('Y') + ggtitle('Decision Limits')+
+  scale_x_continuous(expand=c(0,0))+scale_y_continuous(expand=c(0,0))
+end_time <- Sys.time()
+RunningTime <- end_time - start_time
+cat(paste("Running Time:",round(RunningTime,2),"Minutes"))
+```
+
+<img src="images/plot6.png" width="426" height="455" />
+
+As seen by the decision limits above, it seems our new model is having a very difficult time classifying center data points, which is expected since they are all in fact near neighbors. Additionally, it took 4.38 minutes to run, which is 200 times longer than Linear Classification algorithm.
+
+## 4. Neural Networks
+
+We will generate a 100 neuron single layer neural network with Softmax output layer for classification.
+You can check my <a href="https://juan-cristobal-andrews.github.io/Simple-Neural-Network-From-Scratch/" target="_blank">Simple Regression Neural Network Notebook</a> for a more in-depth / step-by-step approach on these types of algorithms.
+
+### 4.1 Features and Parameter Initialization
+
+```R
+# Initialize parameters
+h = 100
+W <- 0.01 * matrix(rnorm(ncol(X)*h), nrow = ncol(X), ncol=h)
+b <- matrix(0, nrow = 1, ncol = h)
+W2 <- 0.01 * matrix(rnorm(K*h), nrow = h, ncol=K)
+b2 <- matrix(0, nrow = 1, ncol = K)
+
+W <- as.matrix(W)
+W2 <- as.matrix(W2)
+
+Y <- matrix(0, nrow(y), K)
+  for (i in 1:(nrow(y))){
+  Y[i, as.numeric(y[i,])] <- 1
+}
+```
+
+### 4.2 Algorithm
+
+```R
+# Gradient Descent
+LearningRate <- 1
+reg = 0.001
+for (i in 1:9000) {
+  
+  # We calculate Scores and Probs
+  hidden_layer <- pmax(as.matrix(X) %*% W + matrix(rep(b,nrow(X)), nrow = nrow(X), byrow = T),0)
+  scores = hidden_layer %*% W2 + matrix(rep(b2,nrow(X)), nrow = nrow(X), byrow = T)
+  exp_scores <- exp(scores)
+  probs <- exp_scores / rowSums(exp_scores)
+  
+  # compute the loss: sofmax and regularization
+  corect_logprobs <- -log(probs)
+  data_loss <- sum(corect_logprobs*Y)/nrow(X)
+  reg_loss <- 0.5*reg*sum(W*W) + 0.5*reg*sum(W2*W2)
+  loss <- data_loss + reg_loss
+
+  if(i %% 1000==0) {
+    # Print on the screen some message
+    cat(paste0("Iteration: ", i, " loss ",loss,"\n"))
+  }
+  
+  # Gradients
+  dscores <- (probs-Y)/nrow(X)
+  dW2 <- t(hidden_layer)%*%dscores
+  db2 <- colSums(dscores)
+  
+  dHidden <- dscores %*% t(W2)
+  dHidden[hidden_layer <= 0 ] <- 0
+  
+  # finally into W,b
+  dW = t(X)%*%dHidden
+  db =  colSums(dHidden)
+  
+  dW2 = dW2 + reg*W2 # regularization gradient
+  dW = dW + reg*W # regularization gradient
+
+  
+  W2 <- W2 - dW2*LearningRate
+  b2 <- b2 - db2*LearningRate
+  W <- W - dW*LearningRate
+  b <- b - db*LearningRate
+  
+}
+```
+
+<img src="images/output9.png" width="330" height="155" />
+
+### 4.3 Accuracy
+
+```R
+# Classification
+Color <- function(X,W,b,K,W2,b2) {
+
+  # We calculate Scores and Probs
+  hidden_layer <- pmax(as.matrix(X) %*% W + matrix(rep(b,nrow(X)), nrow = nrow(X), byrow = T),0)
+  scores = hidden_layer %*% W2 + matrix(rep(b2,nrow(X)), nrow = nrow(X), byrow = T)
+  exp_scores <- exp(scores)
+  probs <- exp_scores / rowSums(exp_scores)
+  
+  # Compute class
+  Class <- apply(probs, 1, which.max)
+  Class <- data.frame(prob=Class)
+  return(Class$prob)
+  
+}
+```
+
+```R
+# We calcuylate accuracy
+Real <- data.frame(Real=y$y)
+Real$Prediction <- Color(X,W,b,K,W2,b2)
+Real$Match <- ifelse(Real$Real == Real$Prediction, 1, 0)
+Accuracy <- round(sum(Real$Match)/nrow(Real),4)
+print(paste("Accuracy of ",Accuracy*100,"%",sep=""))
+```
+
+<img src="images/output10.png" width="210" height="23" />
+
+### 4.4 Decision Limits
+
+```R
+# We calculate background colors
+x_coord = seq(min(X[,1]) - 0.05,max(X[,1]) + 0.05,length.out = 400)
+y_coord = seq(min(X[,2]) - 0.05,max(X[,2]) + 0.05, length.out = 400)
+coord = expand.grid(x = x_coord, y = y_coord)
+coord[['prob']] = Color(coord,W,b,K,W2,b2)
+coord$prob <- as.character(coord$prob)
+
+start_time <- Sys.time()
+colsdot <- c("1" = "blue", "2" = "darkred", "3" = "darkgreen")
+colsfill <- c("1" = "#aaaaff", "2" = "#ffaaaa", "3" = "#aaffaa")
+ggplot() + 
+  geom_tile(data=coord,mapping=aes(x, y, fill=prob), alpha=0.8) +
+  geom_point(data=test,mapping=aes(x,y, colour=Class),size=3 ) + 
+  scale_color_manual(values=colsdot) +
+  scale_fill_manual(values=colsfill) +
+  xlab('X') + ylab('Y') + ggtitle('Limites de decision')+
+  scale_x_continuous(expand=c(0,0))+scale_y_continuous(expand=c(0,0))
+end_time <- Sys.time()
+RunningTime <- end_time - start_time
+cat(paste("Running Time:",round(RunningTime,2),"Seconds"))
+```
+
+<img src="images/plot7.png" width="434" height="449" />
+
+This algorithm had the best performance in terms of accuracy and running time. As observed, it's able to better understand the spiral shape of the point distribution in the plot which is represented by more clear limits and good classification of central data points.
+
+## 5. Final Thoughts
+So far we've seen that our 3 algorithms performed better than random classification. It's clear that each algorithm has their own advangantes and their usage will vary depending on the dataset and resource constraints.
+
+In particular, we can observe that K-Nearest Neighbors seems it's simple enough and doesn't require training, though, it needs to run against the whole dataset each time we classify a single datapoint, having impacts in scalability and performance. In contrast, both Neural Network and Linear Classifiers train a model which takes some initial time, but the later execution of the model runs
+
+It seems that for this type of scenarios we should expect better results from Neural Networks, since Linear Classifiers fall short with non-linear functions such as this spiral and K-Nearest Neighbors has some trouble with non sparse data, which could lead to worst approximations on a higher dimension dataset.
+
+
+
 
 
 
