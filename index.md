@@ -1,5 +1,5 @@
 # Introduction
-The idea of this notebook is to explore a step-by-step approach to create a <b>Linear Classifier with Softmax</b> without the help of any third party library. We will later compare its results with two other supervised learning algorithms such as Neural Networks and K-Nearest Neighbors in order to see if there's any difference in performance and accuracy.
+The idea of this notebook is to explore a step-by-step approach to create a <b>Linear Classifier with Softmax</b> without the help of any third party library. We will later compare its results with two other supervised learning algorithms such as <a href="https://juan-cristobal-andrews.github.io/Simple-Neural-Network-From-Scratch/" target="_blank">Neural Network</a> and <a href="https://juan-cristobal-andrews.github.io/K-Nearest-Neighbors-Algorithm-From-Scratch/" target="_blank">K-Nearest Neighbors</a> in order to see if there's any difference in performance and accuracy.
 
 In practice, these Algorithms should be useful enough for us to classify our data whenever we have already made clusters (in this case color) which will serve as a starting point to train our models.
 
@@ -23,7 +23,7 @@ ggplot() +
 
 <img src="images/plot1.png" width="422" height="422" />
 
-As we can observe, our data has 900 points distributed in the complex form of a spiral and it's classified in 3 clusters (Red, Green and Blue) en equal amounts (300 per class).
+As we can observe, our data has 900 points distributed in the complex form of a spiral function and it's classified in 3 clusters (Red, Green and Blue) en equal amounts (300 per class).
 
 ### 1.1 Train and test sample generation
 
@@ -44,7 +44,7 @@ OriginalTest <- test
 
 ### 1.2 Train Data
 
-With this data we will generate train our models. This corresponds to 75% of our data.
+With this data we will train our models. This corresponds to 75% of our data.
 
 ```R
 # Display data
@@ -62,7 +62,7 @@ By comparing to the "all sample data" plot we can now observe much fewer points.
 
 ### 1.3 Test Data
 
-This corresponds to leftover (25%) data. Even though in this scenario we already know it's classification, we will simulate a more realistic case in which we don't, in order to "predict" it's colors.
+Corresponds to leftover (25%) data. Even though in this scenario we already know it's classification, we will simulate a more realistic case in which we don't in order to "predict" it's true colors.
 
 ```R
 # Display data
@@ -75,7 +75,7 @@ ggplot() +
 
 <img src="images/plot3.png" width="422" height="422" />
 
-As seen in the plot above we now have many points missing since this only represents 25% of our training data. Additionally, our spiral is not very clear now and colors are completely gone. <b>We will try to predict these colors</b> by creating different algorithms which we will later compare in order to observe its accuracy.
+As seen in the plot above we now have many points missing since this only represents 25% of our training data. Additionally, our spiral is not very clear now and colors are completely gone. <b>We will try to predict these colors</b> by creating different algorithms which we will later compare in order to observe its accuracy and performance.
 
 ## 2. Linear Classifier with Softmax
 
@@ -191,7 +191,7 @@ Lets see if our classifier works as expected. For this we need to remember the f
 
 <p align="center"><img src="images/formula.png" width="192" height="36" /></p>
 
-<p align="center"><img src="images/example.png" width="660" height="448" /></p>
+<p align="center"><img src="images/example.png" width="664" /></p>
 
 
 ```R
