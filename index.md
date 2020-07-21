@@ -175,13 +175,13 @@ b
 
 <b>2.3.1 Real Classification Example</b>
 
-Let's calculate the Class probability of a random number from the Dataset, such as the point number 356.
+Let's calculate the Class probability of a random number from the Dataset, such as the point number 510.
 
 ```R
-SampleData[356,]
+SampleData[510,]
 ```
 
-<img src="images/output3.png" width="219" height="117" />
+<img src="images/output3.png" width="233" height="114" />
 
 As observed, we already know the correct class is 2 (Red).
 
@@ -195,36 +195,36 @@ Lets see if our classifier works as expected. For this we need to remember the f
 
 
 ```R
-sample_score <- c(SampleData[356,]$x,SampleData[356,]$y) %*% W + b
+sample_score <- c(SampleData[510,]$x,SampleData[510,]$y) %*% W + b
 exponencial_score <- exp(sample_score)
 probabilities <- exponencial_score / rowSums(exponencial_score)
 probabilities
 ```
 
-<img src="images/output4.png" width="215" height="56" />
+<img src="images/output4.png" width="231" height="59" />
 
 As seen above, we calculate a 96% chance of this data point being red, which is <b>correct</b>.
 
 <b>2.3.3 Another Example</b>
 
-Let's try with another random number, such as data point number 471
+Let's try with another random number, such as data point number 667.
 
 ```R
-sample_score <- c(SampleData[471,]$x,SampleData[471,]$y) %*% W + b
+sample_score <- c(SampleData[667,]$x,SampleData[667,]$y) %*% W + b
 exponencial_score <- exp(sample_score)
 probabilities <- exponencial_score / rowSums(exponencial_score)
 probabilities
 ```
 
-<img src="images/output5.png" width="229" height="59" />
+<img src="images/output5.png" width="215" height="56" />
 
-As observed our model predicts it to be Blue with 66% probability. But as seen below, it's true color is green (Class 3) which the model assigned only 23% chance.
+As observed our model predicts it to be Blue with highest probability of 49%. But as seen below, it's true color is green (Class 3) which the model assigned only 37% chance.
 
 ```R
 SampleData[471,]
 ```
 
-<img src="images/output6.png" width="236" height="112" />
+<img src="images/output6.png" width="222" height="113" />
 
 ### 2.4 Accuracy
 
