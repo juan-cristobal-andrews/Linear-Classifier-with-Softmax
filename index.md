@@ -217,6 +217,70 @@ probabilities
 
 <img src="images/output5.png" width="229" height="59" />
 
+As observed our model predicts it to be Blue with 66% probability. But as seen below, it's true color is green (Class 3) which the model assigned only 23% chance.
+
+```R
+SampleData[471,]
+```
+
+<img src="images/output6.png" width="236" height="112" />
+
+### 2.4 Accuracy
+
+First, we need to generate our classification function.
+This will allow us to evaluate every single data point within our training data set.
+
+```R
+# Classification
+Color <- function(X,W,b,K) {
+  N <- nrow(X)
+  scores <- as.matrix(X) %*% W + matrix(rep(b,N), nrow = N, byrow = T)
+  exp_scores <- exp(scores)
+  probs <- exp_scores / rowSums(exp_scores)
+  Class <- apply(probs, 1, which.max)
+  Class <- data.frame(prob=Class)
+  return(Class$prob)
+}
+```
+
+```R
+# Predict Train Data
+Real <- data.frame(Real=y$y)
+Real$Prediction <- Color(X,W,b,K)
+Real$Match <- ifelse(Real$Real == Real$Prediction, 1, 0)
+Accuracy <- round(sum(Real$Match)/nrow(Real),4)
+print(paste("Accuracy of ",Accuracy*100,"%",sep=""))
+```
+
+<img src="images/output7.png" width="207" height="22" />
+
+Even though our data point Nº356 was correctly classified, it seems that this model performs correctly only <b>56% of the times</b> on our train sample. Note that even though this might seem low, in fact, is a significal increase from random chance where we would expect only <b>33% accuracy</b>.
+
+### 2.5 Predicting our Test Sample
+
+```R
+# Predict Test Data
+Real <- data.frame(Real=test$Class)
+Real$Prediction <- Color(test[,1:2],W,b,K)
+Real$Match <- ifelse(Real$Real == Real$Prediction, 1, 0)
+Accuracy <- round(sum(Real$Match)/nrow(Real),4)
+print(paste("Accuracy of ",Accuracy*100,"%",sep=""))
+
+# Display data
+colsdot <- c("1" = "blue", "2" = "darkred", "3" = "darkgreen")
+PClass <- as.character(Real$Prediction)
+ggplot() + 
+  geom_point(data=test,mapping=aes(x,y, colour=PClass),size=3 ) +  
+  scale_color_manual(values=colsdot) +
+  xlab('X') + ylab('Y') + ggtitle('Train Data')
+```
+
+<img src="images/output7.png" width="259" height="422" />
+
+
+
+
+
 
 
 
