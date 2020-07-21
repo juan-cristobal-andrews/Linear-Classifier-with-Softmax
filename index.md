@@ -21,7 +21,7 @@ ggplot() +
   xlab('X') + ylab('Y') + ggtitle('All Sample Data')
 ```
 
-<img src="images/plot1.jpg" width="422" height="422" />
+<img src="images/plot1.png" width="422" height="422" />
 
 As we can observe, our data has 900 points distributed in the complex form of a spiral and it's classified in 3 clusters (Red, Green and Blue) en equal amounts (300 per class).
 
@@ -56,7 +56,7 @@ ggplot() +
   xlab('X') + ylab('Y') + ggtitle('Train Data')
 ```
 
-<img src="images/plot2.jpg" width="422" height="422" />
+<img src="images/plot2.png" width="422" height="422" />
 
 By comparing to the "all sample data" plot we can now observe much fewer points. These points will be used to train our algorithms into learning our training data classifications (RGB colors) as shown below.
 
@@ -73,7 +73,7 @@ ggplot() +
   xlab('X') + ylab('Y') + ggtitle('Test Data')
 ```
 
-<img src="images/plot3.jpg" width="422" height="422" />
+<img src="images/plot3.png" width="422" height="422" />
 
 As seen in the plot above we now have many points missing since this only represents 25% of our training data. Additionally, our spiral is not very clear now and colors are completely gone. <b>We will try to predict these colors</b> by creating different algorithms which we will later compare in order to observe its accuracy.
 
