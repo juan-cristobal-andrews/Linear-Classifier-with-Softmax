@@ -255,7 +255,7 @@ print(paste("Accuracy of ",Accuracy*100,"%",sep=""))
 
 <img src="images/output7.png" width="207" />
 
-Even though our data point Nº471 was correctly classified, it seems that this model performs correctly only <b>56% of the times</b> on our train sample. Note that even though this might seem low, in fact, is a significal increase from random chance where we would expect only <b>33% accuracy</b>.
+Even though our data point Nº510 was correctly classified, it seems that this model performs correctly only <b>56% of the times</b> on our train sample. Note that even though this might seem low, in fact, is a significal increase from random chance where we would expect only <b>33% accuracy</b>.
 
 ### 2.5 Predicting our Test Sample
 
