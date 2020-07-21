@@ -278,7 +278,7 @@ ggplot() +
 
 <img src="images/plot4.png" width="425" />
 
-We now have a higher <b>out-of-sample accuracy of 49%</b>, which proves this model performs well on new data. Having said so, even though our model somehow understood our shape, it seems it's having troubles with some parts of it. Can you guess why is this happening?
+We now have an <b>out-of-sample accuracy of 49%</b>, which proves this model performs well on new data. Having said so, even though our model somehow understood our shape, it seems it's having troubles with some parts of it. Can you guess why is this happening?
 
 ### 2.5 Decision Limits
 
