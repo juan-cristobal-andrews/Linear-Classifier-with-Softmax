@@ -278,6 +278,109 @@ ggplot() +
 
 <img src="images/plot4.png" width="425" height="451" />
 
+We now have a higher <b>out-of-sample accuracy of 49%</b>, which proves this model performs well on new data. Having said so, even though our model somehow understood our shape, it seems it's having troubles with some parts of it. Can you guess why is this happening?
+
+### 2.5 Decision Limits
+
+Is clear in the prediction plot above that our model somewhat understood our shape, but not quite. To further explore this, we will try to map our decision limits which should shed some light into how our model classifies this two dimensional space.
+
+In simple words, we will simulate 160.000 data points (400x400 matrix) within the range of our original dataset, which when later plotted, will fill most of the empty spaces with colors. This will help us express in detail how our model would classify this 2D space within it's learnt Color classes. The more points we generate, the better our "resolution" will be, much like pixels on a TV.
+
+```R
+# We calculate background colors
+x_coord = seq(min(X[,1]) - 0.008,max(X[,1]) + 0.008,length.out = 400)
+y_coord = seq(min(X[,2]) - 0.008,max(X[,2]) + 0.008, length.out = 400)
+coord = expand.grid(x = x_coord, y = y_coord)
+coord[['prob']] = Color(coord,W,b,K)
+coord$prob <- as.character(coord$prob)
+
+
+# We calculate predictions and plot decition area
+start_time <- Sys.time()
+colsdot <- c("1" = "blue", "2" = "darkred", "3" = "darkgreen")
+colsfill <- c("1" = "#aaaaff", "2" = "#ffaaaa", "3" = "#aaffaa")
+ggplot() + 
+  geom_tile(data=coord,mapping=aes(x, y, fill=prob), alpha=0.8) +
+  geom_point(data=test,mapping=aes(x,y, colour=PClass),size=3 ) + 
+  scale_color_manual(values=colsdot) +
+  scale_fill_manual(values=colsfill) +
+  xlab('X') + ylab('Y') + ggtitle('Decision Limits')+
+  scale_x_continuous(expand=c(0,0))+scale_y_continuous(expand=c(0,0))
+end_time <- Sys.time()
+RunningTime <- end_time - start_time
+cat(paste("Running Time:",round(RunningTime,2),"Seconds"))
+```
+<img src="images/plot5.png" width="426" height="456" />
+
+It's now clear how our model classified our data points.<br>
+It did so by finding a linear combination which separated our points into the 3 classes (Red, Green and Blue). Each linear combination was carefully selected (trough gradient descent optimization) in order to minimize wrong classifications (our cost function), which ended up being the shape shown above.
+
+As expected, we can observe that this model is able to only predict data that's linearly separable. In other words, it's unable to correctly predict non-linear shapes such as this one.
+
+## 3. K-Nearest Neighbors Algorithm
+
+Below is an example of a custom application of this algorithm to this scenario.
+You can check my <a href="https://juan-cristobal-andrews.github.io/K-Nearest-Neighbors-Algorithm-From-Scratch/" target="_blank">K-Nearest Neighbors Algorithm Notebook</a> for a more in-depth / step-by-step approach.
+
+### 3.1 Algorithm
+
+```R
+# We define a function for prediction
+KnnL2Prediction <- function(x,y,K) {
+    
+  # Train data
+  Train <- train
+  # This matrix will contain all X,Y values that we want test.
+  Test <- data.frame(X=x,Y=y)
+    
+  # Data normalization
+  Test$X <- (Test$X - min(Train$x))/(min(Train$y) - max(Train$x))
+  Test$Y <- (Test$Y - min(Train$y))/(min(Train$y) - max(Train$y))
+  Train$x <- (Train$x - min(Train$x))/(min(Train$x) - max(Train$x))
+  Train$y <- (Train$y - min(Train$y))/(min(Train$y) - max(Train$y))
+
+  # We will calculate L1 and L2 distances between Test and Train values.
+  VarNum <- ncol(Train)-1
+  L1 <- 0
+  L2 <- 0
+  for (i in 1:VarNum) {
+    L1 <- L1 + (Train[,i] - Test[,i])
+    L2 <- L2 + (Train[,i] - Test[,i])^2
+  }
+    
+  # We will use L2 Distance
+  L2 <- sqrt(L2)
+  
+  # We add labels to distances and sort
+  Result <- data.frame(Label=Train$Class,L1=L1,L2=L2)
+  
+  # We sort data based on score
+  ResultL1 <-Result[order(Result$L1),]
+  ResultL2 <-Result[order(Result$L2),]
+  
+  # Return Table of Possible classifications
+  a <- prop.table(table(head(ResultL2$Label,K)))
+  b <- as.data.frame(a)
+  return(as.character(b$Var1[b$Freq == max(b$Freq)]))
+}
+```
+
+```R
+### 3.1 Accuracy
+
+# Predictions over our Test sample
+K <- 1
+test$Prediction <- mapply(KnnL2Prediction, test$x, test$y,K)
+
+# We calculate accuracy on test data
+test$Match <- ifelse(test$Class == test$Prediction, 1, 0)
+Accuracy <- round(sum(test$Match)/nrow(test),4)
+print(paste("Accuracy of ",Accuracy*100,"%",sep=""))
+```
+
+<img src="images/output8.png" width="214" height="30" />
+
+
 
 
 
