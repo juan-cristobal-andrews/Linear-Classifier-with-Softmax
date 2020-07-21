@@ -125,6 +125,76 @@ cat("Bias (b)")
 b
 ```
 
+<img src="images/output1.png" width="255" height="265" />
+
+<b>New (learned) Parameters:</b>
+
+```R
+# Gradient Descent
+LearningRate <- 1
+reg = 0.0001
+for (i in 1:30000) {
+  
+  # We calculate Scores and Probs
+  scores <- as.matrix(X) %*% W + matrix(rep(b,N*K), nrow = N*K, byrow = T)
+  exp_scores <- exp(scores)
+  probs <- exp_scores / rowSums(exp_scores)
+  
+  # compute the loss: sofmax and regularization
+  corect_logprobs <- -log(probs)
+  data_loss <- sum(corect_logprobs*Y)/nrow(X)
+  reg_loss <- 0.5*reg*sum(W*W) 
+  loss <- data_loss + reg_loss
+  
+  if(i %% 10000==0) {
+    # Print on the screen some message
+    cat(paste0("Iteration ", i,": ",loss,"\n"))
+  }
+  
+  # Gradients
+  dscores <- (probs-Y)/nrow(X)
+  dW <- t(X)%*%dscores
+  db <- colSums(dscores)
+  
+  dW = dW + reg*W # regularization gradient
+  
+  W <- W - dW*LearningRate
+  b <- b - db*LearningRate
+  
+  
+}
+cat("\n\nNew Weights (W)")
+W
+cat("New Bias (b)")
+b
+```
+
+<img src="images/output2.png" width="293" height="312" />
+
+### 2.3 Evaluation
+
+<b>2.3.1 Real Classification Example</b>
+
+Let's calculate the Class probability of a random number from the Dataset, such as the point number 356.
+
+```R
+SampleData[356,]
+```
+
+<img src="images/output3.png" width="219" height="117" />
+
+As observed, we already know the correct class is 2 (Red).
+
+<b>2.3.2 Predicted Classification Example</b>
+
+Lets see if our classifier works as expected. For this we need to remember the formula:
+
+<img src="images/formula.png" width="192" height="36" />
+
+<img src="images/example.png" width="660" height="448" />
+
+
+
 
 
 
