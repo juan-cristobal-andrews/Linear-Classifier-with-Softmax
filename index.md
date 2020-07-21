@@ -191,7 +191,7 @@ Lets see if our classifier works as expected. For this we need to remember the f
 
 <p align="center"><img src="images/formula.png" width="192" height="36" /></p>
 
-<p align="center"><img src="images/example.png" width="664" /></p>
+<p align="center"><img src="images/example.png" width="661" /></p>
 
 
 ```R
@@ -203,11 +203,11 @@ probabilities
 
 <img src="images/output4.png" width="231" height="59" />
 
-As seen above, we calculate a 96% chance of this data point being red, which is <b>correct</b>.
+As seen above, we calculated 96% chance of this datapoint being red, which is <b>correct</b>.
 
 <b>2.3.3 Another Example</b>
 
-Let's try with another random number, such as data point number 667.
+Let's try with another random number, such as datapoint number 667.
 
 ```R
 sample_score <- c(SampleData[667,]$x,SampleData[667,]$y) %*% W + b
@@ -255,7 +255,7 @@ print(paste("Accuracy of ",Accuracy*100,"%",sep=""))
 
 <img src="images/output7.png" width="207" height="22" />
 
-Even though our data point Nº356 was correctly classified, it seems that this model performs correctly only <b>56% of the times</b> on our train sample. Note that even though this might seem low, in fact, is a significal increase from random chance where we would expect only <b>33% accuracy</b>.
+Even though our data point Nº471 was correctly classified, it seems that this model performs correctly only <b>56% of the times</b> on our train sample. Note that even though this might seem low, in fact, is a significal increase from random chance where we would expect only <b>33% accuracy</b>.
 
 ### 2.5 Predicting our Test Sample
 
