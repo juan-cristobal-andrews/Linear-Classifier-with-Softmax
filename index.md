@@ -550,9 +550,9 @@ cat(paste("Running Time:",round(RunningTime,2),"Seconds"))
 This algorithm had the best performance in terms of accuracy and running time. As observed, it's able to better understand the spiral shape of the point distribution in the plot which is represented by more clear limits and good classification of central data points.
 
 ## 5. Final Thoughts
-So far we've seen that our 3 algorithms performed better than random classification. It's clear that each algorithm has their own advantages and their usage will vary depending on the dataset and resource constraints.
+So far we've seen that our 3 algorithms performed better than random classification. It's clear that each algorithm has their own advantages and their usage will vary depending on the dataset and resources constraints.
 
-In particular, we can observe that K-Nearest Neighbors seems it's simple enough and doesn't require training, though, it needs to run against the whole dataset each time we classify a single datapoint, having impacts in scalability and performance. In contrast, both Neural Network and Linear Classifiers train a model which takes some initial time, but the later execution of the model runs
+In particular, we can observe that K-Nearest Neighbors seems to be simple enough and doesn't require training, though it needs to run against the whole dataset each time we want to classify a single datapoint, having impacts in scalability and performance. In contrast, both Neural Network and Linear Classifiers train a model which takes some initial time, but the later execution of the model runs
 
 It seems that for this type of scenarios we should expect better results from Neural Networks, since Linear Classifiers fall short with non-linear functions such as this spiral and K-Nearest Neighbors has some trouble with non sparse data, which could lead to worst approximations on a higher dimension dataset.
 
