@@ -77,6 +77,21 @@ ggplot() +
 
 As seen in the plot above we now have many points missing since this only represents 25% of our training data. Additionally, our spiral is not very clear now and colors are completely gone. <b>We will try to predict these colors</b> by creating different algorithms which we will later compare in order to observe its accuracy.
 
+## 2. Linear Classifier with Softmax
+
+Below is a step-by-step example of a Linear Classifier with Softmax cost function.
+What we want to achieve is for each selected gray point above (our test values), where we allegedly don't know it's true color, find the correct classification by finding the correct linear combination of characteristics in a very similar way on how we usually generate our lineal models.
+
+<img src="images/formula.png" width="192" height="36" />
+
+Note that our Weight (W) and Bias (b) are both Vectors, which dimensions of 2x3 and 1x3 respectively.
+
+<b>Aditionally, we need to define: </b>
+- <b>Score Function: </b> Our linear classifier.
+- <b>Cost Function: </b> In this case we will use Softmax since it provides an intuitive output in the form of a normalized class probability. We will use cross-entropy loss.
+- <b>Optimization Method</b>: We will use gradient descent in order to minimize our cost function.
+
+
 
 
 
