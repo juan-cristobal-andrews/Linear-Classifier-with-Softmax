@@ -91,6 +91,42 @@ Note that our Weight (W) and Bias (b) are both Vectors, which dimensions of 2x3 
 - <b>Cost Function: </b> In this case we will use Softmax since it provides an intuitive output in the form of a normalized class probability. We will use cross-entropy loss.
 - <b>Optimization Method</b>: We will use gradient descent in order to minimize our cost function.
 
+### 2.1 Features and Parameter Initialization
+
+```R
+# We define features
+X <- data.frame(A=train$x,B=train$y)
+y <- data.frame(y=train$Class)
+
+# Variables: Number Classes, Dimensions and Scores per Class
+K <- nrow(unique(y))
+D <- ncol(X)
+N <- nrow(X)/K
+
+# One-hot encoding of Classes
+Y <- matrix(0, nrow(y), K)
+for (i in 1:(nrow(y))){
+  Y[i, as.numeric(y[i,])] <- 1
+}
+
+# Initialize parameters
+W <- 0.01 * matrix(rnorm(D*K), nrow = D)
+b <- matrix(0, nrow = 1, ncol = K)
+```
+
+### 2.2 Parameter Calculation using Gradient Descent
+
+<b>Original Parameters</b>
+
+```R
+cat("Weights (W)")
+W
+cat("Bias (b)")
+b
+```
+
+
+
 
 
 
