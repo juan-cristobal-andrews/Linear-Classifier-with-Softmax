@@ -21,7 +21,7 @@ ggplot() +
   xlab('X') + ylab('Y') + ggtitle('All Sample Data')
 ```
 
-<img src="images/plot1.png" width="422" height="422" />
+<img src="images/plot1.png" width="422" />
 
 As we can observe, our data has 900 points distributed in the complex form of a spiral function and it's classified in 3 clusters (Red, Green and Blue) en equal amounts (300 per class).
 
@@ -56,7 +56,7 @@ ggplot() +
   xlab('X') + ylab('Y') + ggtitle('Train Data')
 ```
 
-<img src="images/plot2.png" width="422" height="422" />
+<img src="images/plot2.png" width="422" />
 
 By comparing to the "all sample data" plot we can now observe much fewer points. These points will be used to train our algorithms into learning our training data classifications (RGB colors) as shown below.
 
@@ -73,7 +73,7 @@ ggplot() +
   xlab('X') + ylab('Y') + ggtitle('Test Data')
 ```
 
-<img src="images/plot3.png" width="422" height="422" />
+<img src="images/plot3.png" width="422"/>
 
 As seen in the plot above we now have many points missing since this only represents 25% of our training data. Additionally, our spiral is not very clear now and colors are completely gone. <b>We will try to predict these colors</b> by creating different algorithms which we will later compare in order to observe its accuracy and performance.
 
@@ -82,7 +82,7 @@ As seen in the plot above we now have many points missing since this only repres
 Below is a step-by-step example of a Linear Classifier with Softmax cost function.
 What we want to achieve is for each selected gray point above (our test values), where we allegedly don't know it's true color, find the correct classification by finding the correct linear combination of characteristics in a very similar way on how we usually generate our lineal models.
 
-<p align="center"><img src="images/formula.png" width="192" height="36" /></p>
+<p align="center"><img src="images/formula.png" width="192" /></p>
 
 Note that our Weight (W) and Bias (b) are both Vectors, which dimensions of 2x3 and 1x3 respectively.
 
@@ -125,7 +125,7 @@ cat("Bias (b)")
 b
 ```
 
-<img src="images/output1.png" width="255" height="265" />
+<img src="images/output1.png" width="255"/>
 
 <b>New (learned) Parameters:</b>
 
@@ -169,7 +169,7 @@ cat("New Bias (b)")
 b
 ```
 
-<img src="images/output2.png" width="293" height="312" />
+<img src="images/output2.png" width="293" />
 
 ### 2.3 Evaluation
 
@@ -181,7 +181,7 @@ Let's calculate the Class probability of a random number from the Dataset, such 
 SampleData[510,]
 ```
 
-<img src="images/output3.png" width="233" height="114" />
+<img src="images/output3.png" width="233" />
 
 As observed, we already know the correct class is 2 (Red).
 
@@ -189,7 +189,7 @@ As observed, we already know the correct class is 2 (Red).
 
 Lets see if our classifier works as expected. For this we need to remember the formula:
 
-<p align="center"><img src="images/formula.png" width="192" height="36" /></p>
+<p align="center"><img src="images/formula.png" width="192" /></p>
 
 <p align="center"><img src="images/example.png" width="661" /></p>
 
@@ -201,7 +201,7 @@ probabilities <- exponencial_score / rowSums(exponencial_score)
 probabilities
 ```
 
-<img src="images/output4.png" width="231" height="59" />
+<img src="images/output4.png" width="231" />
 
 As seen above, we calculated 96% chance of this datapoint being red, which is <b>correct</b>.
 
@@ -216,7 +216,7 @@ probabilities <- exponencial_score / rowSums(exponencial_score)
 probabilities
 ```
 
-<img src="images/output5.png" width="215" height="56" />
+<img src="images/output5.png" width="215" />
 
 As observed our model predicts it to be Blue with highest probability of 49%. But as seen below, it's true color is green (Class 3) which the model assigned only 37% chance.
 
@@ -224,7 +224,7 @@ As observed our model predicts it to be Blue with highest probability of 49%. Bu
 SampleData[471,]
 ```
 
-<img src="images/output6.png" width="222" height="113" />
+<img src="images/output6.png" width="222" />
 
 ### 2.4 Accuracy
 
@@ -253,7 +253,7 @@ Accuracy <- round(sum(Real$Match)/nrow(Real),4)
 print(paste("Accuracy of ",Accuracy*100,"%",sep=""))
 ```
 
-<img src="images/output7.png" width="207" height="22" />
+<img src="images/output7.png" width="207" />
 
 Even though our data point Nº471 was correctly classified, it seems that this model performs correctly only <b>56% of the times</b> on our train sample. Note that even though this might seem low, in fact, is a significal increase from random chance where we would expect only <b>33% accuracy</b>.
 
@@ -276,7 +276,7 @@ ggplot() +
   xlab('X') + ylab('Y') + ggtitle('Train Data')
 ```
 
-<img src="images/plot4.png" width="425" height="451" />
+<img src="images/plot4.png" width="425" />
 
 We now have a higher <b>out-of-sample accuracy of 49%</b>, which proves this model performs well on new data. Having said so, even though our model somehow understood our shape, it seems it's having troubles with some parts of it. Can you guess why is this happening?
 
@@ -310,7 +310,7 @@ end_time <- Sys.time()
 RunningTime <- end_time - start_time
 cat(paste("Running Time:",round(RunningTime,2),"Seconds"))
 ```
-<img src="images/plot5.png" width="426" height="456" />
+<img src="images/plot5.png" width="426" />
 
 It's now clear how our model classified our data points.<br>
 It did so by finding a linear combination which separated our points into the 3 classes (Red, Green and Blue). Each linear combination was carefully selected (trough gradient descent optimization) in order to minimize wrong classifications (our cost function), which ended up being the shape shown above.
@@ -378,7 +378,7 @@ Accuracy <- round(sum(test$Match)/nrow(test),4)
 print(paste("Accuracy of ",Accuracy*100,"%",sep=""))
 ```
 
-<img src="images/output8.png" width="214" height="30" />
+<img src="images/output8.png" width="214" />
 
 Note that our model has now 94% out-of-sample accuracy, which is great.
 
@@ -410,7 +410,7 @@ RunningTime <- end_time - start_time
 cat(paste("Running Time:",round(RunningTime,2),"Minutes"))
 ```
 
-<img src="images/plot6.png" width="426" height="455" />
+<img src="images/plot6.png" width="426" />
 
 As seen by the decision limits above, it seems our new model is having a very difficult time classifying center data points, which is expected since they are all in fact near neighbors. Additionally, it took 4.38 minutes to run, which is 200 times longer than Linear Classification algorithm.
 
@@ -487,7 +487,7 @@ for (i in 1:9000) {
 }
 ```
 
-<img src="images/output9.png" width="330" height="155" />
+<img src="images/output9.png" width="330" />
 
 ### 4.3 Accuracy
 
@@ -518,7 +518,7 @@ Accuracy <- round(sum(Real$Match)/nrow(Real),4)
 print(paste("Accuracy of ",Accuracy*100,"%",sep=""))
 ```
 
-<img src="images/output10.png" width="210" height="23" />
+<img src="images/output10.png" width="210" />
 
 ### 4.4 Decision Limits
 
@@ -545,7 +545,7 @@ RunningTime <- end_time - start_time
 cat(paste("Running Time:",round(RunningTime,2),"Seconds"))
 ```
 
-<img src="images/plot7.png" width="434" height="449" />
+<img src="images/plot7.png" width="434" />
 
 This algorithm had the best performance in terms of accuracy and running time. As observed, it's able to better understand the spiral shape of the point distribution in the plot which is represented by more clear limits and good classification of central data points.
 
