@@ -276,7 +276,7 @@ ggplot() +
   xlab('X') + ylab('Y') + ggtitle('Train Data')
 ```
 
-<img src="images/plot4.png" width="259" height="422" />
+<img src="images/plot4.png" width="425" height="451" />
 
 
 
