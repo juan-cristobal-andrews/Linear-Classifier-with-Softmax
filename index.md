@@ -193,6 +193,35 @@ Lets see if our classifier works as expected. For this we need to remember the f
 
 <img src="images/example.png" width="660" height="448" />
 
+```R
+sample_score <- c(SampleData[356,]$x,SampleData[356,]$y) %*% W + b
+exponencial_score <- exp(sample_score)
+probabilities <- exponencial_score / rowSums(exponencial_score)
+probabilities
+```
+
+<img src="images/output4.png" width="215" height="56" />
+
+As seen above, we calculate a 96% chance of this data point being red, which is <b>correct</b>.
+
+<b>2.3.3 Another Example</b>
+
+Let's try with another random number, such as data point number 471
+
+```R
+sample_score <- c(SampleData[471,]$x,SampleData[471,]$y) %*% W + b
+exponencial_score <- exp(sample_score)
+probabilities <- exponencial_score / rowSums(exponencial_score)
+probabilities
+```
+
+<img src="images/output5.png" width="229" height="59" />
+
+
+
+
+
+
 
 
 
