@@ -64,7 +64,18 @@ By comparing to the "all sample data" plot we can now observe much fewer points.
 
 This corresponds to leftover (25%) data. Even though in this scenario we already know it's classification, we will simulate a more realistic case in which we don't, in order to "predict" it's colors.
 
+```R
+# Display data
+library(ggplot2)
+ggplot() + 
+  geom_point(data=test,mapping=aes(x,y),size=3 ) +  
+  scale_color_manual(values=colsdot) +
+  xlab('X') + ylab('Y') + ggtitle('Test Data')
+```
 
+<img src="images/plot3.jpg" width="422" height="422" />
+
+As seen in the plot above we now have many points missing since this only represents 25% of our training data. Additionally, our spiral is not very clear now and colors are completely gone. <b>We will try to predict these colors</b> by creating different algorithms which we will later compare in order to observe its accuracy.
 
 
 
